@@ -1,6 +1,6 @@
 ---
 - name: Linux Setup
-  hosts: localhost
+  hosts: jwtsbots
   connection: local
   become: true
 
