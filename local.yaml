@@ -1,0 +1,63 @@
+---
+- name: Linux Setup
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+    - name: Install packages
+      ansible.builtin.package:
+        state: latest
+        name:
+          - tmux
+          - zsh
+          - git
+          - neovim
+          - curl
+          - wget
+          - net-tools
+          - python3
+          - python-pip
+          - unzip
+          - code
+          - jq
+          - golang-go
+
+    - name: Install pip packages
+      ansible.builtin.pip:
+        state: latest
+        name:
+          - virtualenv
+          - pre-commit
+
+    - name: Install nvm
+      ansible.builtin.command:
+        cmd: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+    - name: Copy .zshrc file
+      ansible.builtin.copy:
+        src: files/zshrc
+        dest: /home/jwtracy/.zshrc
+        owner: jwtracy
+        group: jwtracy
+        mode: "0660"
+
+    - name: Add ansible user
+      ansible.builtin.user:
+        name: velociraptor
+        system: true
+
+    - name: Set up sudo for ansible user
+      ansible.builtin.copy:
+        src: files/sudoer_velociraptor
+        dest: /etc/sudoers.d/velociraptor
+        owner: root
+        group: root
+        mode: "0440"
+
+    - name: Add ansible-pull cron job
+      ansible.builtin.cron:
+        name: ansible auto-provision
+        user: velociraptor
+        minute: "*/10"
+        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
