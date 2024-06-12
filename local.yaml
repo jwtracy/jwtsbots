@@ -118,6 +118,7 @@
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
             dest: /tmp/omz-install.sh
+            mode: "0770"
         - name: Install
           ansible.builtin.command:
             cmd: /tmp/omz-install.sh
