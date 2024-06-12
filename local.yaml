@@ -82,11 +82,6 @@
           - virtualenv
           - pre-commit
 
-    - name: Set zsh as shell
-      ansible.builtin.user:
-        name: jwtracy
-        shell: /usr/bin/zsh
-
     - name: Setup jwtracy sudo
       ansible.builtin.copy:
         src: files/sudoers/sudoer_jwtracy
@@ -110,6 +105,22 @@
         user: velociraptor
         minute: "*/10"
         job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
+
+    - name: Set zsh as shell
+      ansible.builtin.user:
+        name: jwtracy
+        shell: /usr/bin/zsh
+
+    - name: Install OhMyZsh
+      become_user: jwtracy
+      block:
+        - name: Download
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+            dest: /tmp/omz-install.sh
+        - name: Install
+          ansible.builtin.command:
+            cmd: /tmp/omz-install.sh
 
     - name: jwtracy setup
       become_user: jwtracy
