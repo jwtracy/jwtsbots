@@ -114,6 +114,19 @@
     - name: jwtracy setup
       become_user: jwtracy
       block:
+        - name: Ensure VimPlug dir
+          ansible.builtin.file:
+            path: ~/.local/share/nvim/site/autoload/
+            state: directory
+        - name: Ensure TPM dir
+          ansible.builtin.file:
+            path: ~/.tmux/plugins
+            state: directory
+        - name: Ensure NeoVim dir
+          ansible.builtin.file:
+            path: ~/.config/nvim
+            state: directory
+
         - name: Setup VimPlug
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
