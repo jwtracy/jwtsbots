@@ -19,9 +19,9 @@
 
         - name: Add repository
           ansible.builtin.apt_repository:
-            repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
             state: present
-            filename: vscode.list
+            filename: vscode
 
     - name: Add github repository
       block:
@@ -29,17 +29,32 @@
           ansible.builtin.get_url:
             url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
             dest: /etc/apt/keyrings/githubcli-archive-keyring.gpg
-            mode: "0666"
+            mode: "0664"
 
         - name: Add repository
           ansible.builtin.apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
             state: present
+            filename: github-cli
+
+    - name: Add cloudflare repository
+      block:
+        - name: Get key
+          ansible.builtin.get_url:
+            url: https://pkg.cloudflare.com/cloudflare-main.gpg
+            dest: /etc/apt/keyrings/cloudflare-main.gpg
+            mode: "0664"
+
+        - name: Add repository
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared jammy main"
+            state: present
+            filename: cloudflared
 
     - name: Install apt packages
       ansible.builtin.package:
         update_cache: true
-        state: latest
+        state: present
         name:
           - apt-transport-https
           - tmux
@@ -57,6 +72,7 @@
           - python3
           - python3-pip
           - golang-go
+          - cloudflared
 
     - name: Install pip packages
       ansible.builtin.pip:
@@ -66,27 +82,73 @@
           - virtualenv
           - pre-commit
 
-    - name: Copy .zshrc file
+    - name: Set zsh as shell
+      ansible.builtin.user:
+        name: jwtracy
+        shell: /usr/bin/zsh
+
+    - name: Setup jwtracy sudo
       ansible.builtin.copy:
-        src: files/zshrc
-        dest: /home/jwtracy/.zshrc
-        owner: jwtracy
-        group: jwtracy
-        mode: "0660"
-#    - name: Add ansible user
-#      ansible.builtin.user:
-#        name: velociraptor
-#        system: true
-#    - name: Set up sudo for ansible user
-#      ansible.builtin.copy:
-#        src: files/sudoer_velociraptor
-#        dest: /etc/sudoers.d/velociraptor
-#        owner: root
-#        group: root
-#        mode: "0440"
-#    - name: Add ansible-pull cron job
-#      ansible.builtin.cron:
-#        name: ansible auto-provision
-#        user: velociraptor
-#        minute: "*/10"
-#        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
+        src: files/sudoers/sudoer_jwtracy
+        dest: /etc/sudoers.d/jwtracy
+        mode: "0440"
+
+    - name: Add ansible user
+      ansible.builtin.user:
+        name: velociraptor
+        system: true
+
+    - name: Setup velociraptor sudo
+      ansible.builtin.copy:
+        src: files/sudoers/sudoer_velociraptor
+        dest: /etc/sudoers.d/velociraptor
+        mode: "0440"
+
+    - name: Add ansible-pull cron job
+      ansible.builtin.cron:
+        name: ansible auto-provision
+        user: velociraptor
+        minute: "*/10"
+        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
+
+    - name: jwtracy setup
+      become_user: jwtracy
+      block:
+        - name: Setup VimPlug
+          ansible.builtin.get_url:
+            url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+            dest: ~/.local/share/nvim/site/autoload/plug.vim
+            mode: "0660"
+        - name: Setup TPM
+          ansible.builtin.git:
+            repo: https://github.com/tmux-plugins/tpm
+            dest: ~/.tmux/plugins/tpm
+            version: v3.1.0
+
+        - name: Copy .zshrc file
+          ansible.builtin.copy:
+            src: files/jwtracy/zshrc
+            dest: ~/.zshrc
+            mode: "0660"
+        - name: Copy nvim rc file
+          ansible.builtin.copy:
+            src: files/jwtracy/init.vim
+            dest: ~/.config/nvim/init.vim
+            mode: "0660"
+        - name: Copy vim rc file
+          ansible.builtin.copy:
+            src: files/jwtracy/vimrc
+            dest: ~/.vimrc
+            mode: "0660"
+        - name: Copy tmux rc file
+          ansible.builtin.copy:
+            src: files/jwtracy/tmux.conf
+            dest: ~/.tmux.conf
+            mode: "0660"
+
+        - name: Install vim plugins
+          ansible.builtin.command:
+            cmd: nvim +PlugInstall +qa
+        - name: Install tmux plugins
+          ansible.builtin.command:
+            cmd: tmux source ~/.tmux.conf
