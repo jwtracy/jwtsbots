@@ -14,7 +14,7 @@
             mode: "0664"
 
         - name: Dearmor
-          ansible.builtin.command:
+          ansible.builtin.shell:
             cmd: "gpg --dearmor < /tmp/microsoft.asc > /etc/apt/keyrings/packages.microsoft.gpg"
 
         - name: Add repository
