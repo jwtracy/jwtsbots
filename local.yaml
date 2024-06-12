@@ -68,23 +68,22 @@
         owner: jwtracy
         group: jwtracy
         mode: "0660"
-
-    - name: Add ansible user
-      ansible.builtin.user:
-        name: velociraptor
-        system: true
-
-    - name: Set up sudo for ansible user
-      ansible.builtin.copy:
-        src: files/sudoer_velociraptor
-        dest: /etc/sudoers.d/velociraptor
-        owner: root
-        group: root
-        mode: "0440"
-
-    - name: Add ansible-pull cron job
-      ansible.builtin.cron:
-        name: ansible auto-provision
-        user: velociraptor
-        minute: "*/10"
-        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
+#    - name: Add ansible user
+#      ansible.builtin.user:
+#        name: velociraptor
+#        system: true
+#
+#    - name: Set up sudo for ansible user
+#      ansible.builtin.copy:
+#        src: files/sudoer_velociraptor
+#        dest: /etc/sudoers.d/velociraptor
+#        owner: root
+#        group: root
+#        mode: "0440"
+#
+#    - name: Add ansible-pull cron job
+#      ansible.builtin.cron:
+#        name: ansible auto-provision
+#        user: velociraptor
+#        minute: "*/10"
+#        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
