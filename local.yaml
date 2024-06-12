@@ -61,6 +61,7 @@
     - name: Install pip packages
       ansible.builtin.pip:
         state: latest
+        break_system_packages: true
         name:
           - virtualenv
           - pre-commit
@@ -76,7 +77,6 @@
 #      ansible.builtin.user:
 #        name: velociraptor
 #        system: true
-#
 #    - name: Set up sudo for ansible user
 #      ansible.builtin.copy:
 #        src: files/sudoer_velociraptor
@@ -84,7 +84,6 @@
 #        owner: root
 #        group: root
 #        mode: "0440"
-#
 #    - name: Add ansible-pull cron job
 #      ansible.builtin.cron:
 #        name: ansible auto-provision
