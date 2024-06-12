@@ -61,7 +61,8 @@
     - name: Install pip packages
       ansible.builtin.pip:
         state: latest
-        break_system_packages: true
+        extra_args:
+          - --break-system-packages
         name:
           - virtualenv
           - pre-commit
