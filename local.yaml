@@ -13,10 +13,6 @@
             dest: /etc/apt/keyrings/microsoft.asc
             mode: "0664"
 
-            # - name: Checksum
-            #   ansible.builtin.command:
-            #     cmd: gpg --dearmor < /tmp/microsoft.asc > /etc/apt/keyrings/packages.microsoft.gpg
-
         - name: Add repository
           ansible.builtin.apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.asc] https://packages.microsoft.com/repos/code stable main"
@@ -38,7 +34,6 @@
     - name: Install apt packages
       ansible.builtin.package:
         update_cache: true
-        upgrade: true
         state: latest
         name:
           - apt-transport-https
