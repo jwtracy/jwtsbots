@@ -112,14 +112,20 @@
         name: jwtracy
         shell: /usr/bin/zsh
 
+    - name: Check if zsh installed
+      ansible.builtin.stat:
+        path: /usr/bin/zsh
+      register: zsh
+
     - name: Install OhMyZsh
       become_user: jwtracy
+      when: "not zsh.stat.exists"
       block:
-        - name: Download
+        - name: Install OhMyZsh | Download
           ansible.builtin.get_url:
             url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
             dest: /tmp/omz-install.sh
-        - name: Install
+        - name: Install OhMyZsh | Install
           ansible.builtin.command:
             cmd: bash /tmp/omz-install.sh
 

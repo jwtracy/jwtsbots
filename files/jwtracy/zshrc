@@ -118,7 +118,6 @@ tmux
 vi-mode
 virtualenv)
 
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -158,8 +157,6 @@ alias pip='pip3'
 alias ghpr='gh pr create --draft --fill'
 alias tdl='tmux source ~/.tmux_light.conf'
 alias tdd='tmux source ~/.tmux_dark.conf'
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/jwtracy/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/jwtracy/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 zmodload zsh/zprof
 
