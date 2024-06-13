@@ -60,6 +60,7 @@
           - tmux
           - zsh
           - git
+          - gh
           - neovim
           - curl
           - wget
@@ -104,7 +105,7 @@
         name: ansible auto-provision
         user: velociraptor
         minute: "*/10"
-        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml
+        job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml >> /var/log/ansible-pull.log 2>&1
 
     - name: Set zsh as shell
       ansible.builtin.user:
@@ -168,6 +169,16 @@
           ansible.builtin.copy:
             src: files/jwtracy/tmux.conf
             dest: ~/.tmux.conf
+            mode: "0660"
+        - name: Copy tmux_dark rc file
+          ansible.builtin.copy:
+            src: files/jwtracy/tmux_dark.conf
+            dest: ~/.tmux_dark.conf
+            mode: "0660"
+        - name: Copy tmux_light rc file
+          ansible.builtin.copy:
+            src: files/jwtracy/tmux_light.conf
+            dest: ~/.tmux_light.conf
             mode: "0660"
 
         - name: Install vim plugins
