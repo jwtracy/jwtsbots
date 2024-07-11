@@ -135,7 +135,6 @@
       block:
         - name: Ensure VimPlug dir
           ansible.builtin.file:
-            owner: jwtracy
             path: ~/.local/share/nvim/site/autoload/
             state: directory
         - name: Ensure TPM dir
