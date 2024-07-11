@@ -4,7 +4,6 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 export GOROOT="/usr/local/go"
 export GOPATH="$HOME/Source/go"
 
-export PATH="$HOME/.jenv/bin:$PATH"
 # export PATH="$HOME/.pyenv/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
@@ -15,9 +14,6 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jwtracy/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jwtracy/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
-
-
-eval "$(jenv init -)"
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
 
@@ -105,7 +101,6 @@ git-auto-fetch
 gitignore
 helm
 istioctl
-jenv
 jsontools
 kubectl
 kubectx
@@ -158,5 +153,5 @@ alias ghpr='gh pr create --draft --fill'
 alias tdl='tmux source ~/.tmux_light.conf'
 alias tdd='tmux source ~/.tmux_dark.conf'
 
-zmodload zsh/zprof
+# zmodload zsh/zprof
 

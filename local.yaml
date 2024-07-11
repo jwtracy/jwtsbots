@@ -92,6 +92,7 @@
     - name: Add ansible user
       ansible.builtin.user:
         name: velociraptor
+        shell: /bin/bash
         system: true
 
     - name: Setup velociraptor sudo
