@@ -60,6 +60,7 @@
           - tmux
           - zsh
           - git
+          - acl
           - gh
           - neovim
           - curl
