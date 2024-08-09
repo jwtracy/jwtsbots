@@ -233,7 +233,12 @@
         - name: helmfile | Unarchive
           ansible.builtin.unarchive:
             src: /tmp/helmfile.tar.gz
-            dest: /usr/local/bin
+            dest: /tmp/helmfile
+
+        - name: helmfile | Install
+          ansible.builtin.copy:
+            src: /tmp/helmfile/helmfile
+            dest: /usr/local/bin/helmfile
             mode: "0755"
             owner: root
             group: root
