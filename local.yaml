@@ -23,6 +23,24 @@
             state: present
             filename: vscode
 
+    - name: helm
+      block:
+        - name: helm | Get key
+          ansible.builtin.get_url:
+            url: https://baltocdn.com/helm/signing.asc
+            dest: /tmp/helm.asc
+            mode: "0664"
+
+        - name: helm | Dearmor
+          ansible.builtin.shell:
+            cmd: "gpg --dearmor < /tmp/helm.asc > /etc/apt/keyrings/helm-stable-debian.gpg"
+
+        - name: vscode | Add repository
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
+            state: present
+            filename: helm-stable-debian
+
     - name: github
       block:
         - name: github | Get key
@@ -85,6 +103,7 @@
           - kubectl
           - curl
           - wget
+          - helm
           - gpg
           - net-tools
           - unzip
@@ -96,6 +115,7 @@
           - python3-pip
           - golang-go
           - cloudflared
+
     - name: pip
       ansible.builtin.pip:
         state: latest
