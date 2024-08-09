@@ -126,7 +126,7 @@
       ansible.builtin.cron:
         name: ansible auto-provision
         user: velociraptor
-        minute: "*/10"
+        minute: "*/5"
         job: ansible-pull -o -U https://github.com/jwtracy/jwtsbots local.yaml >> /var/log/ansible-pull.log 2>&1
 
     - name: Set zsh as shell
