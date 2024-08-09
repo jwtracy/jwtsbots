@@ -244,10 +244,9 @@
       block:
         - name: Install helmfile.yaml
           register: helmfile_contents
-          ansible.builtin.file:
-            path: ~/helmfile
-            src: files/helmfile
-            recurse: true
+          ansible.builtin.copy:
+            src: files/helmfile/
+            dest: ~/helmfile
 
         # - name: Apply helmfile.yaml
         #   ansible.builtin.command:
