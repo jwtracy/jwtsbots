@@ -82,6 +82,7 @@
           - acl
           - gh
           - neovim
+          - kubectl
           - curl
           - wget
           - gpg
