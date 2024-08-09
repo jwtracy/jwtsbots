@@ -1,0 +1,27 @@
+# helmfile.yaml
+
+# Specify the version of Helmfile
+apiVersion: helmfile.dev/v1
+
+# Specify the repositories to use
+repositories:
+  # Specify the repository name and URL
+  - name: stable
+    url: https://charts.helm.sh/stable
+  
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+
+# Specify the release information
+releases:
+  # Specify the release name
+  - name: kube-state-metrics
+    # Specify the chart name and repository
+    chart: stable/my-chart
+    # Specify the version of the chart
+    version: 1.0.0
+    # Specify the namespace for the release
+    namespace: my-namespace
+    # Specify any additional values for the chart
+    values:
+      # Additional values go here

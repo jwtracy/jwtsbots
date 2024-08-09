@@ -1,5 +1,4 @@
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# If you come from bash you might have to change your $PATH.  export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 export GOROOT="/usr/local/go"
 export GOPATH="$HOME/Source/go"
@@ -13,7 +12,6 @@ export PATH="$HOME/.aws-cli:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jwtracy/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/jwtracy/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
 
@@ -149,6 +147,7 @@ alias py='python3'
 alias venvi='py -m virtualenv .venv'
 alias venva='source .venv/bin/activate'
 alias pip='pip3'
+alias k='kubectl'
 alias ghpr='gh pr create --draft --fill'
 alias tdl='tmux source ~/.tmux_light.conf'
 alias tdd='tmux source ~/.tmux_dark.conf'
