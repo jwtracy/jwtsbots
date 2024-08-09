@@ -221,28 +221,28 @@
         path: /usr/local/bin/helmfile
       register: helmfile
 
-    - name: Install helmfile
+    - name: helmfile
       when: "not helmfile.stat.exists"
       block:
-        - name: Get archive
+        - name: helmfile | Get archive
           ansible.builtin.get_url:
             url: https://github.com/helmfile/helmfile/releases/download/v0.167.1/helmfile_0.167.1_linux_amd64.tar.gz
             dest: /tmp/helmfile.tar.gz
             mode: "0664"
 
-        - name: Unarchive
+        - name: helmfile | Unarchive
           ansible.builtin.unarchive:
             src: /tmp/helmfile.tar.gz
-            dest: /usr/local/bin/helmfile
+            dest: /usr/local/bin
             mode: "0755"
             owner: root
             group: root
 
-    - name: Apply helmfile
-      become_user: jwtracy
-      block:
-        - name: Install helmfile.yaml
-          register: helmfile_contents
-          ansible.builtin.copy:
-            src: files/helmfile/
-            dest: ~/helmfile
+    # - name: Apply helmfile
+    #   become_user: jwtracy
+    #   block:
+    #     - name: Install helmfile.yaml
+    #       register: helmfile_contents
+    #       ansible.builtin.copy:
+    #         src: files/helmfile/
+    #         dest: ~/helmfile
