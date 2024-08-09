@@ -101,10 +101,13 @@
           - gh
           - neovim
           - kubectl
+          - nfs-kernel-server
           - curl
           - wget
           - helm
           - gpg
+          - fuse
+          - ntfs-3g
           - net-tools
           - unzip
           - jq

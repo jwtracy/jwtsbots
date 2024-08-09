@@ -1,23 +1,26 @@
-# helmfile.yaml
-
-# Specify the version of Helmfile
-apiVersion: helmfile.dev/v1
-
-# Specify the repositories to use
 repositories:
   - name: prometheus-community
     url: https://prometheus-community.github.io/helm-charts
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  - name: metallb
+    url: https://metallb.github.io/metallb
 
-# Specify the release information
 releases:
-  # Specify the release name
-  - name: kube-state-metrics
-    # Specify the chart name and repository
-    chart: prometheus-community/kube-state-metrics
-    # Specify the version of the chart
-    version: 1.0.0
-    # Specify the namespace for the release
-    namespace: my-namespace
-    # Specify any additional values for the chart
-    values:
-      # Additional values go here
+  - name: prometheus
+    chart: prometheus-community/prometheus
+    version: 25.25.0
+    namespace: prometheus
+    createNamespace: true
+
+  - name: metallb
+    chart: metallb/metallb
+    version: 0.14.8
+    namespace: metallb
+    createNamespace: true
+
+  - name: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+    version: 4.11.1
+    namespace: ingress-nginx
+    createNamespace: true
