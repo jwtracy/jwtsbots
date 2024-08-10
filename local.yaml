@@ -100,6 +100,7 @@
           - acl
           - gh
           - neovim
+          - network-manager
           - kubectl
           - nfs-kernel-server
           - curl

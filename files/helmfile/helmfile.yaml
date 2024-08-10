@@ -1,26 +1,62 @@
 repositories:
+  - name: stable
+    url: https://charts.helm.sh/stable
+  - name: incubator
+    url: https://charts.helm.sh/incubator
   - name: prometheus-community
     url: https://prometheus-community.github.io/helm-charts
   - name: ingress-nginx
     url: https://kubernetes.github.io/ingress-nginx
   - name: metallb
     url: https://metallb.github.io/metallb
-
+  - name: csi-driver-nfs
+    url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+  - name: mojo2600
+    url: https://mojo2600.github.io/pihole-kubernetes/
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+    
 releases:
-  - name: prometheus
-    chart: prometheus-community/prometheus
-    version: 25.25.0
-    namespace: prometheus
-    createNamespace: true
-
+  - name: csi-driver-nfs
+    chart: csi-driver-nfs/csi-driver-nfs
+    version: 4.8.0
+    namespace: kube-system
+    set:
+      - name: kubeletDir
+        value: /var/snap/microk8s/common/var/lib/kubelet
+    
   - name: metallb
     chart: metallb/metallb
     version: 0.14.8
-    namespace: metallb
+    namespace: metallb-system
     createNamespace: true
 
   - name: ingress-nginx
     chart: ingress-nginx/ingress-nginx
     version: 4.11.1
     namespace: ingress-nginx
+    createNamespace: true
+    values:
+     - ./values/nginx.yaml
+
+  - name: mojo2600
+    chart: mojo2600/pihole
+    version: 2.26.1
+    namespace: pihole-system
+    createNamespace: true
+    values:
+     - ./values/pihole.yaml
+    force: true
+
+  - name: externaldns-pihole
+    namespace: pihole-system
+    chart: bitnami/external-dns
+    version: 8.3.4
+    values:
+      - ./values/external-dns.yaml
+
+  - name: prometheus
+    chart: prometheus-community/prometheus
+    version: 25.25.0
+    namespace: prometheus
     createNamespace: true

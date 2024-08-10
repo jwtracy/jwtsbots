@@ -1,0 +1,46 @@
+# -- `spec.PersitentVolumeClaim` configuration
+persistentVolumeClaim:
+  # -- set to true to use pvc
+  enabled: true
+
+ingress:
+  ingressClassName: nginx-internal
+  enabled: true
+  hosts:
+    - "pihole.home"
+
+DNS1: "10.0.0.1"
+# -- Configuration for the DNS service on port 53
+serviceDns:
+  # -- `spec.type` for the DNS Service
+  type: LoadBalancer
+  # -- A fixed `spec.loadBalancerIP` for the DNS Service
+  loadBalancerIP: "10.0.0.200"
+  # -- Annotations for the DNS service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+    metallb.universe.tf/address-pool: pool
+
+# -- Configuration for the web interface service
+serviceWeb:
+  # -- `spec.type` for the web interface Service
+  type: LoadBalancer
+  # -- A fixed `spec.loadBalancerIP` for the web interface Service
+  loadBalancerIP: "10.0.0.200"
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+    metallb.universe.tf/address-pool: pool
+
+
+# -- Use an existing secret for the admin password.
+admin:
+  # -- If set to false admin password will be disabled, adminPassword specified above and the pre-existing secret (if specified) will be ignored.
+  enabled: true
+  # -- Specify an existing secret to use as admin password
+  existingSecret: ""
+  # -- Specify the key inside the secret to use
+  passwordKey: "password"
+  # -- Specify [annotations](docs/Values.md#admin.annotations) to be added to the secret
+  annotations:
+    # reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+    # reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "external-dns"

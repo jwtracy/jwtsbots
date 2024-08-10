@@ -1,0 +1,16 @@
+provider: pihole
+policy: upsert-only
+txtOwnerId: "homelab"
+pihole:
+  server: http://mojo2600-pihole-web.pihole-system.svc.cluster.local
+extraEnvVars:
+  - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mojo2600-pihole-password
+        key: password
+serviceAccount:
+  create: true
+  name: "external-dns"
+ingressClassFilters:
+  - nginx-internal
