@@ -2,6 +2,9 @@
 persistentVolumeClaim:
   # -- set to true to use pvc
   enabled: true
+  storageClass: nfs-csi
+  existingClaim: pihole-pvc
+
 
 ingress:
   ingressClassName: nginx-internal
@@ -9,13 +12,14 @@ ingress:
   hosts:
     - "pihole.home"
 
-DNS1: "10.0.0.1"
+DNS1: "1.1.1.1"
+DNS2: "1.0.0.1"
 # -- Configuration for the DNS service on port 53
 serviceDns:
   # -- `spec.type` for the DNS Service
   type: LoadBalancer
   # -- A fixed `spec.loadBalancerIP` for the DNS Service
-  loadBalancerIP: "10.0.0.200"
+  loadBalancerIP: "192.168.1.1"
   # -- Annotations for the DNS service
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
@@ -26,7 +30,7 @@ serviceWeb:
   # -- `spec.type` for the web interface Service
   type: LoadBalancer
   # -- A fixed `spec.loadBalancerIP` for the web interface Service
-  loadBalancerIP: "10.0.0.200"
+  loadBalancerIP: "192.168.1.1"
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
     metallb.universe.tf/address-pool: pool
@@ -44,3 +48,15 @@ admin:
   annotations:
     # reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
     # reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "external-dns"
+extraObjects:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: pihole-pvc
+  spec:
+    storageClassName: nfs-csi
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi

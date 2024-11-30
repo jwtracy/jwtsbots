@@ -103,6 +103,7 @@
           - network-manager
           - kubectl
           - nfs-kernel-server
+          - tree
           - curl
           - wget
           - helm
